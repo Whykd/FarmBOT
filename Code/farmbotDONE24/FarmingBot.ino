@@ -53,7 +53,7 @@ boolean getSensVal(){
    int sens2 = analogRead(sensor1);
    int avg = (sens1+sens2)/2;
    
-   return avg > threshold;
+   return avg > threshold; //change to reflect proper values
   
 }
 
