@@ -62,7 +62,7 @@ boolean isNight(){
 
 void loop() { 
   DateTime now = rtc.now(); //current time on RTC
-  if (isWet()){
+  if (!isWet()){
     digitalWrite(pump, LOW);
   }
   if (isNight()){
