@@ -9,7 +9,8 @@ const int pumpRelay = 3;  //pump relay pin
 const int sensor1 = A0; // Soil Sensor input at Analog PIN A0 and A1
 const int sensor2 = A1;
 const int lights = 4;   //light relay pin
-const int threshold = 0;
+
+const int threshold = 0; //threshold
 
 
 RTC_DS1307 rtc; //init RTC obj
