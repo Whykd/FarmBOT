@@ -5,7 +5,7 @@
 //Farmbot code V2.0
 //ALL PINS ARE ON PCB DESIGN
 
-const int pumpRelay = 3;  //pump relay pin 
+const int pump = 3;  //pump relay pin 
 const int sensor1 = A0; // Soil Sensor input at Analog PIN A0 and A1
 const int sensor2 = A1;
 const int lights = 4;   //light relay pin
@@ -19,10 +19,10 @@ LiquidCrystal_I2C lcd(0x3F, 16, 2); //init LCD obj
 void setup() {
    lcd.init();
    lcd.backlight();
-   pinMode(pumpRelay, OUTPUT);
+   pinMode(pump, OUTPUT);
    pinMode(lights, OUTPUT);
    Serial.begin(57600);
-   digitalWrite(pumpRelay, HIGH);
+   digitalWrite(pump, HIGH);
    digitalWrite(lights, HIGH);
 
 #ifndef ESP8266
@@ -53,7 +53,7 @@ boolean isWet(){
 }
 
 boolean isNight(){
-   int hour = now.hour();
+   int hour = rtc.now().hour();
    if (hour > 19 || hour < 6){ //turns lights on from 7PM to 6AM
     return true;
    }
@@ -67,7 +67,7 @@ void loop() {
     digitalWrite(pump, LOW);
   }
   if (isNight()){
-    digitalWrite(lights, LOW):
+    digitalWrite(lights, LOW);
   }
   delay(10000); //wait 10 seconds
   lcd.clear();
