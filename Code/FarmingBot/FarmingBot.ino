@@ -10,7 +10,7 @@ const int sensor1 = A0; // Soil Sensor input at Analog PIN A0 and A1
 const int sensor2 = A1;
 const int lights = 4;   //light relay pin
 
-const int threshold = 0; //threshold
+const int threshold = 500; //threshold to change when pump is on or off
 
 
 RTC_DS1307 rtc; //init RTC obj
@@ -40,16 +40,16 @@ if (! rtc.begin()) {
 
 
 
-boolean isWet(){
+boolean isntWet(){
    int sens1 = analogRead(sensor1);
    int sens2 = analogRead(sensor2);
    int avg = (sens1+sens2)/2;
    lcd.print("Sensor 1: " + sens1);
    lcd.setCursor(0, 1);              //moves cursor to next line
    lcd.print("Sensor 2: " + sens2);
-   lcd.setCursor(0, 0);              //moves cursor back up
+   lcd.setCursor(0, 0);              //moves cursor back up TO FIRST LINE
    
-   return avg > threshold; //change to reflect proper values
+   return !(avg > threshold); //if avg is greater than threshold, return true
 }
 
 boolean isNight(){
@@ -63,11 +63,17 @@ boolean isNight(){
 
 void loop() { 
   DateTime now = rtc.now(); //current time on RTC
-  if (!isWet()){
-    digitalWrite(pump, LOW);
+  if (isntWet()){
+    digitalWrite(pump, LOW); //turns pump on
+  }
+  else{
+    digitalWrite(pump, HIGH); //turns pump off
   }
   if (isNight()){
-    digitalWrite(lights, LOW);
+    digitalWrite(lights, LOW); //turns lights on
+  }
+  else{
+    digitalWrite(lights, HIGH); //turns lights off
   }
   delay(10000); //wait 10 seconds
   lcd.clear();
