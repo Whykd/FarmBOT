@@ -7922,11 +7922,11 @@ This footprint was designed to help hold the alignment of a through-hole compone
 <attribute name="NAME" x="25.908" y="71.374" size="1.778" layer="95" font="vector"/>
 <attribute name="VALUE" x="26.67" y="25.146" size="1.778" layer="96" font="vector" align="top-left"/>
 </instance>
-<instance part="LCD_CONN" gate="G$1" x="-20.32" y="55.88" smashed="yes" grouprefs="LCD I/O">
+<instance part="LCD_CONN" gate="G$1" x="-20.32" y="55.88" smashed="yes" grouprefs="I/O LCD">
 <attribute name="VALUE" x="-25.4" y="48.514" size="1.778" layer="96" font="vector"/>
 <attribute name="NAME" x="-25.4" y="64.008" size="1.778" layer="95" font="vector"/>
 </instance>
-<instance part="RTC_CONN" gate="G$1" x="-20.32" y="25.4" smashed="yes" grouprefs="RTC I/O">
+<instance part="RTC_CONN" gate="G$1" x="-20.32" y="25.4" smashed="yes" grouprefs="I/O RTC">
 <attribute name="VALUE" x="-25.4" y="18.034" size="1.778" layer="96" font="vector"/>
 <attribute name="NAME" x="-25.4" y="33.528" size="1.778" layer="95" font="vector"/>
 </instance>
@@ -7966,13 +7966,13 @@ This footprint was designed to help hold the alignment of a through-hole compone
 </segment>
 <segment>
 <pinref part="LCD_CONN" gate="G$1" pin="2"/>
-<wire x1="-15.24" y1="55.88" x2="-12.7" y2="55.88" width="0.1524" layer="91" grouprefs="LCD I/O"/>
-<label x="-15.24" y="55.88" size="1.778" layer="95" grouprefs="LCD I/O"/>
+<wire x1="-15.24" y1="55.88" x2="-12.7" y2="55.88" width="0.1524" layer="91" grouprefs="I/O LCD"/>
+<label x="-15.24" y="55.88" size="1.778" layer="95" grouprefs="I/O LCD"/>
 </segment>
 <segment>
 <pinref part="RTC_CONN" gate="G$1" pin="2"/>
-<wire x1="-15.24" y1="25.4" x2="-12.7" y2="25.4" width="0.1524" layer="91" grouprefs="RTC I/O"/>
-<label x="-15.24" y="25.4" size="1.778" layer="95" grouprefs="RTC I/O"/>
+<wire x1="-15.24" y1="25.4" x2="-12.7" y2="25.4" width="0.1524" layer="91" grouprefs="I/O RTC"/>
+<label x="-15.24" y="25.4" size="1.778" layer="95" grouprefs="I/O RTC"/>
 </segment>
 </net>
 <net name="SDL" class="0">
@@ -7983,13 +7983,13 @@ This footprint was designed to help hold the alignment of a through-hole compone
 </segment>
 <segment>
 <pinref part="LCD_CONN" gate="G$1" pin="1"/>
-<wire x1="-15.24" y1="53.34" x2="-12.7" y2="53.34" width="0.1524" layer="91" grouprefs="LCD I/O"/>
-<label x="-15.24" y="53.34" size="1.778" layer="95" grouprefs="LCD I/O"/>
+<wire x1="-15.24" y1="53.34" x2="-12.7" y2="53.34" width="0.1524" layer="91" grouprefs="I/O LCD"/>
+<label x="-15.24" y="53.34" size="1.778" layer="95" grouprefs="I/O LCD"/>
 </segment>
 <segment>
 <pinref part="RTC_CONN" gate="G$1" pin="1"/>
-<wire x1="-15.24" y1="22.86" x2="-12.7" y2="22.86" width="0.1524" layer="91" grouprefs="RTC I/O"/>
-<label x="-15.24" y="22.86" size="1.778" layer="95" grouprefs="RTC I/O"/>
+<wire x1="-15.24" y1="22.86" x2="-12.7" y2="22.86" width="0.1524" layer="91" grouprefs="I/O RTC"/>
+<label x="-15.24" y="22.86" size="1.778" layer="95" grouprefs="I/O RTC"/>
 </segment>
 </net>
 <net name="A0" class="0">
@@ -8048,13 +8048,13 @@ This footprint was designed to help hold the alignment of a through-hole compone
 </segment>
 <segment>
 <pinref part="LCD_CONN" gate="G$1" pin="3"/>
-<wire x1="-15.24" y1="58.42" x2="-12.7" y2="58.42" width="0.1524" layer="91" grouprefs="LCD I/O"/>
-<label x="-15.24" y="58.42" size="1.778" layer="95" grouprefs="LCD I/O"/>
+<wire x1="-15.24" y1="58.42" x2="-12.7" y2="58.42" width="0.1524" layer="91" grouprefs="I/O LCD"/>
+<label x="-15.24" y="58.42" size="1.778" layer="95" grouprefs="I/O LCD"/>
 </segment>
 <segment>
 <pinref part="RTC_CONN" gate="G$1" pin="3"/>
-<wire x1="-15.24" y1="27.94" x2="-12.7" y2="27.94" width="0.1524" layer="91" grouprefs="RTC I/O"/>
-<label x="-15.24" y="27.94" size="1.778" layer="95" grouprefs="RTC I/O"/>
+<wire x1="-15.24" y1="27.94" x2="-12.7" y2="27.94" width="0.1524" layer="91" grouprefs="I/O RTC"/>
+<label x="-15.24" y="27.94" size="1.778" layer="95" grouprefs="I/O RTC"/>
 </segment>
 <segment>
 <pinref part="SENS_CONN" gate="G$1" pin="2"/>
@@ -8156,13 +8156,13 @@ This footprint was designed to help hold the alignment of a through-hole compone
 </segment>
 <segment>
 <pinref part="LCD_CONN" gate="G$1" pin="4"/>
-<wire x1="-15.24" y1="60.96" x2="-12.7" y2="60.96" width="0.1524" layer="91" grouprefs="LCD I/O"/>
-<label x="-15.24" y="60.96" size="1.778" layer="95" grouprefs="LCD I/O"/>
+<wire x1="-15.24" y1="60.96" x2="-12.7" y2="60.96" width="0.1524" layer="91" grouprefs="I/O LCD"/>
+<label x="-15.24" y="60.96" size="1.778" layer="95" grouprefs="I/O LCD"/>
 </segment>
 <segment>
 <pinref part="RTC_CONN" gate="G$1" pin="4"/>
-<wire x1="-15.24" y1="30.48" x2="-12.7" y2="30.48" width="0.1524" layer="91" grouprefs="RTC I/O"/>
-<label x="-15.24" y="30.48" size="1.778" layer="95" grouprefs="RTC I/O"/>
+<wire x1="-15.24" y1="30.48" x2="-12.7" y2="30.48" width="0.1524" layer="91" grouprefs="I/O RTC"/>
+<label x="-15.24" y="30.48" size="1.778" layer="95" grouprefs="I/O RTC"/>
 </segment>
 <segment>
 <pinref part="SENS_CONN" gate="G$1" pin="3"/>
