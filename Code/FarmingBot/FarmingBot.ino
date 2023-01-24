@@ -1,16 +1,14 @@
-#include <RTClib.h> // library to run RTC
+#include <RTClib.h>// library to run RTC
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 
 //Farmbot code V2.0
 //ALL PINS ARE ON PCB DESIGN
 
-#define pump 3;  //pump relay pin 
-#define sensor1 A0; // Soil Sensor input at Analog PIN A0 and A1
-#define sensor2 A1;
-#define lights 4;   //light relay pin
+#define pump 3  //pump relay pin 
+#define lights 4   //light relay pin
 
-const int threshold = 500; //threshold to change when pump is on or off
+const int threshold = 700; //threshold to change when pump is on or off
 
 
 RTC_DS1307 rtc; //init RTC obj
@@ -24,16 +22,11 @@ void setup() {
   Serial.begin(57600);
   digitalWrite(pump, HIGH);
   digitalWrite(lights, HIGH);
-
-#ifndef ESP8266
-  while (!Serial); // wait for serial port to connect. Needed for native USB
-#endif
-
-if (! rtc.begin()) {
-  Serial.println("Couldn't find RTC");
-  Serial.flush();
-  while (1) delay(10);
-}
+rtc.begin();
+//if (! rtc.begin()) {
+// Serial.println("Couldn't find RTC");
+//  while (1) delay(10);
+//}.
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); //sets rtc to time when code is compiled
 }
 
@@ -41,13 +34,15 @@ if (! rtc.begin()) {
 
 
 boolean isntWet(){
-  int sens1 = analogRead(sensor1);
-  int sens2 = analogRead(sensor2);
-  int avg = (sens1+sens2)/2;
-  lcd.print("Sensor 1: " + sens1);
-  lcd.setCursor(0, 1);              //moves cursor to next line
-  lcd.print("Sensor 2: " + sens2);
-  lcd.setCursor(0, 0);              //moves cursor back up TO FIRST LINE
+  int sens1 = analogRead(A0);
+  Serial.println(sens1);
+  int sens2 = analogRead(A1);
+  Serial.println(sens2);
+  float avg = (sens1+sens2)/2;
+  Serial.println(avg);
+  lcd.print("AVG: "); 
+  lcd.print(avg);            
+         
   
   return !(avg > threshold); //if avg is greater than threshold, return true
 }
@@ -61,20 +56,23 @@ boolean isNight(){
 }
 
 
-void loop() { 
-  DateTime now = rtc.now(); //current time on RTC
-  if (isntWet()){
+void loop() {
+
+  bool isNotWet = isntWet();
+  bool night = isNight();
+  if (isNotWet){
     digitalWrite(pump, LOW); //turns pump on
   }
   else{
     digitalWrite(pump, HIGH); //turns pump off
   }
-  if (isNight()){
+  if (night){
     digitalWrite(lights, LOW); //turns lights on
   }
   else{
     digitalWrite(lights, HIGH); //turns lights off
   }
-  delay(10000); //wait 10 seconds
+  delay(1000); //wait 10 seconds
   lcd.clear();
+  Serial.println("i made it here");
 }
