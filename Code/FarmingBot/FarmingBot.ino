@@ -8,7 +8,7 @@
 #define pump 3  //pump relay pin 
 #define lights 4   //light relay pin
 
-const int threshold = 700; //threshold to change when pump is on or off
+const int threshold = 490; //threshold to change when pump is on or off
 
 
 RTC_DS1307 rtc; //init RTC obj
@@ -44,7 +44,7 @@ boolean isntWet(){
   lcd.print(avg);            
          
   
-  return !(avg > threshold); //if avg is greater than threshold, return true
+  return (avg > threshold); //if avg is greater than threshold, return true
 }
 
 boolean isNight(){
@@ -74,5 +74,4 @@ void loop() {
   }
   delay(1000); //wait 10 seconds
   lcd.clear();
-  Serial.println("i made it here");
 }
