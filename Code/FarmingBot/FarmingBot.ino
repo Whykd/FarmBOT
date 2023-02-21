@@ -77,8 +77,13 @@ void loop() {
   int sens1 = analogRead(A0);
   int sens2 = analogRead(A1);
   float avg = (sens1+sens2)/2;
+  lcd.setCursor(0,0);
   lcd.print("AVG: "); 
   lcd.print(avg); 
+  lcd.setCursor(0, 1);
+  lcd.print(rtc.now().hour());
+  lcd.print(":");
+  lcd.print(rtc.now().minute());
   delay(1000); 
   lcd.clear();
 }
