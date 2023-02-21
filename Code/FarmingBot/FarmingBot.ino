@@ -1,12 +1,14 @@
-#include <RTClib.h>// library to run RTC
-#include <LiquidCrystal_I2C.h>
+#include <RTClib.h>//Adafruit lib
+#include <LiquidCrystal_I2C.h> //By Marco Shwartz
 #include <Wire.h>
 
 //Farmbot code V2.0
 //ALL PINS ARE ON PCB DESIGN
 
-#define pump 3  //pump relay pin 
-#define lights 4   //light relay pin
+#define pump 4  //pump relay pin 
+#define lights 3   //light relay pin
+//ights on outlet 2
+//pump outlet 3
 
 const int threshold = 490; //threshold to change when pump is on or off
 
@@ -22,14 +24,13 @@ void setup() {
   Serial.begin(57600);
   digitalWrite(pump, HIGH);
   digitalWrite(lights, HIGH);
-rtc.begin();
+  rtc.begin();
 //if (! rtc.begin()) {
 // Serial.println("Couldn't find RTC");
 //  while (1) delay(10);
 //}.
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); //sets rtc to time when code is compiled
 }
-
 
 
 
@@ -49,29 +50,35 @@ boolean isntWet(){
 
 boolean isNight(){
   int hour = rtc.now().hour();
-  if (hour > 19 || hour < 6){ //turns lights on from 7PM to 6AM
+  if (hour >= 7 && hour <= 19){ //turns lights on from 7AM to 7PM
+   Serial.println("day");
    return true;
+   
   }
   return false;
 }
 
 
 void loop() {
-
-  bool isNotWet = isntWet();
   bool night = isNight();
-  if (isNotWet){
-    digitalWrite(pump, LOW); //turns pump on
-  }
-  else{
-    digitalWrite(pump, HIGH); //turns pump off
-  }
   if (night){
     digitalWrite(lights, LOW); //turns lights on
   }
   else{
     digitalWrite(lights, HIGH); //turns lights off
   }
-  delay(1000); //wait 10 seconds
+  DateTime time = rtc.now();
+  if(time.hour() == 8 && time.minute() >= 45 && time.minute() <= 47){
+    digitalWrite(pump, LOW); 
+  }
+  else {
+    digitalWrite(pump, HIGH);
+  }
+  int sens1 = analogRead(A0);
+  int sens2 = analogRead(A1);
+  float avg = (sens1+sens2)/2;
+  lcd.print("AVG: "); 
+  lcd.print(avg); 
+  delay(1000); 
   lcd.clear();
 }
