@@ -7,6 +7,8 @@
 
 #define pump 4  //pump relay pin 
 #define lights 3   //light relay pin
+
+//define timing array
 //ights on outlet 2
 //pump outlet 3
 
@@ -17,6 +19,9 @@ RTC_DS1307 rtc; //init RTC obj
 LiquidCrystal_I2C lcd(0x3F, 16, 2); //init LCD obj
 
 void setup() {
+  //pumpon hour, pumpon minute, pumpoff minute, lighton hour, lightoff hour
+  
+  int[] timings = {8,45,47,7,19}
   lcd.init();
   lcd.backlight();
   pinMode(pump, OUTPUT);
@@ -50,7 +55,7 @@ boolean isntWet(){
 
 boolean isNight(){
   int hour = rtc.now().hour();
-  if (hour >= 7 && hour <= 19){ //turns lights on from 7AM to 7PM
+  if (hour >= timings[3] && hour <= timings[4]){ //turns lights on from 7AM to 7PM
    Serial.println("day");
    return true;
    
@@ -68,7 +73,7 @@ void loop() {
     digitalWrite(lights, HIGH); //turns lights off
   }
   DateTime time = rtc.now();
-  if(time.hour() == 8 && time.minute() >= 45 && time.minute() <= 47){
+  if(time.hour() == timings[0] && time.minute() >= timings[1] && time.minute() <= timings[3]){
     digitalWrite(pump, LOW); 
   }
   else {
