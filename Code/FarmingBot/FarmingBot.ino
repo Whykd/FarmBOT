@@ -5,23 +5,25 @@
 // Farmbot code V2.0
 // ALL PINS ARE ON PCB DESIGN
 
-#define pump 4   // pump relay pin
-#define lights 3 // light relay pin
-
 // define timing array
 // lights on outlet 2
 // pump outlet 3
-
+#define pump 4        // pump relay pin
+#define lights 3      // light relay pin
 #define threshold 490 // threshold to change when pump is on or off
+
+int sens1 = 0;
+int sens2 = 0;
+boolean timeout = true;
+// pumpon hour, pumpon minute, pumpoff minute, lighton hour, lightoff hour
+int[] timings = {8, 45, 47, 7, 19};
 
 RTC_DS1307 rtc;                     // init RTC obj
 LiquidCrystal_I2C lcd(0x3F, 16, 2); // init LCD obj
 
 void setup()
 {
-  // pumpon hour, pumpon minute, pumpoff minute, lighton hour, lightoff hour
-
-  int[] timings = {8, 45, 47, 7, 19} lcd.init();
+  lcd.init();
   lcd.backlight();
   pinMode(pump, OUTPUT);
   pinMode(lights, OUTPUT);
@@ -34,9 +36,6 @@ void setup()
   //   while (1) delay(10);
   // }.
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
-  int sens1 = 0;
-  int sens2 = 0;
-  boolean timeout = true;
 }
 
 boolean isntWet()
@@ -64,19 +63,22 @@ boolean isNight()
   return false;
 }
 
-void checkUpdates(){
+void checkUpdates()
+{
   if (Serial.available() > 0)
   {
     Serial.print("OK");
     Serail.println();
     output = Serial.readString();
-    if (output.substring(0, 1); == 1){
+    if (output.substring(0, 1); == 1)
+    {
       timings = output.substring(1, output.length());
     }
   }
 }
 
-void sendData(){
+void sendData()
+{
   Serial.print("[");
   Serial.print(sens1);
   Serial.print(",");
@@ -119,10 +121,13 @@ void loop()
   lcd.clear();
   checkUpdates();
 
-  if ((time.minute() == 30 || time.minute() == 0) && timeout){
+  if ((time.minute() == 30 || time.minute() == 0) && timeout)
+  {
     sendData();
     timeout = false;
-  }else{
+  }
+  else
+  {
     timeout = true;
   }
 }

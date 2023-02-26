@@ -1,4 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "Code\\FarmingBot\\FarmingBot.ino"
+    "sketch": "Code\\FarmingBot\\FarmingBot.ino",
+    "programmer": "avrispmkii"
 }
