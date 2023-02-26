@@ -34,13 +34,16 @@ void setup()
   //   while (1) delay(10);
   // }.
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
+  int sens1 = 0;
+  int sens2 = 0;
+  boolean timeout = true;
 }
 
 boolean isntWet()
 {
-  int sens1 = analogRead(A0);
+  sens1 = analogRead(A0);
   Serial.println(sens1);
-  int sens2 = analogRead(A1);
+  sens2 = analogRead(A1);
   Serial.println(sens2);
   float avg = (sens1 + sens2) / 2;
   Serial.println(avg);
@@ -59,6 +62,27 @@ boolean isNight()
     return true;
   }
   return false;
+}
+
+void checkUpdates(){
+  if (Serial.available() > 0)
+  {
+    Serial.print("OK");
+    Serail.println();
+    output = Serial.readString();
+    if (output.substring(0, 1); == 1){
+      timings = output.substring(1, output.length());
+    }
+  }
+}
+
+void sendData(){
+  Serial.print("[");
+  Serial.print(sens1);
+  Serial.print(",");
+  Serial.print(sens2);
+  Serial.print("]");
+  Serial.println();
 }
 
 void loop()
@@ -93,4 +117,12 @@ void loop()
   lcd.print(rtc.now().minute());
   delay(1000);
   lcd.clear();
+  checkUpdates();
+
+  if ((time.minute() == 30 || time.minute() == 0) && timeout){
+    sendData();
+    timeout = false;
+  }else{
+    timeout = true;
+  }
 }

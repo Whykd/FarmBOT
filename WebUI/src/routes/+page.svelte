@@ -1,6 +1,4 @@
-<script >
-    
+<script>
 </script>
-<body>
-    testing
-</body>
+
+<body> testing </body>
