@@ -12,25 +12,16 @@
 #define lights 3      // light relay pin
 #define threshold 490 // threshold to change when pump is on or off
 
-int sens1 = 0;
-int sens2 = 0;
-boolean timeout = true;
-// pumpon hour, pumpon minute, pumpoff minute, lighton hour, lightoff hour
-int[] timings = {8, 45, 47, 7, 19};
 
 RTC_DS1307 rtc;                     // init RTC obj
 LiquidCrystal_I2C lcd(0x3F, 16, 2); // init LCD obj
-int[] timings = {8, 45, 47, 7, 19};
+int timings[] = {8, 45, 47, 7, 19};
 int sens1 = 0;
 int sens2 = 0;
 boolean timeout = true;
 
 void setup()
 {
-<<<<<<< HEAD
-  // pumpon hour, pumpon minute, pumpoff minute, lighton hour, lightoff hour
-=======
->>>>>>> 72e4fcb74847675eef74fc19bc1cf5cfd387ef96
   lcd.init();
   lcd.backlight();
   pinMode(pump, OUTPUT);
@@ -70,19 +61,21 @@ boolean isNight()
   return false;
 }
 
-void checkUpdates()
-{
-  if (Serial.available() > 0)
-  {
-    Serial.print("OK");
-    Serail.println();
-    output = Serial.readString();
-    if (output.substring(0, 1); == 1)
-    {
-      timings = output.substring(1, output.length());
-    }
-  }
-}
+//to fix later
+//void checkUpdates()
+//{
+//  if (Serial.available() > 0)
+//  {
+//    Serial.print("OK");
+//    Serial.println();
+//    String output;
+//    output = Serial.readString();
+//    if (output.substring(0, 1) == "1")
+//    {
+//      timings = output.substring(1, output.length());
+//    }
+//  }
+//}
 
 void sendData()
 {
@@ -96,6 +89,7 @@ void sendData()
 
 void loop()
 {
+  isntWet();
   bool night = isNight();
   if (night)
   {
@@ -124,7 +118,7 @@ void loop()
   lcd.print(rtc.now().minute());
   delay(1000);
   lcd.clear();
-  checkUpdates();
+  //checkUpdates();
 
   if ((time.minute() == 30 || time.minute() == 0) && timeout)
   {
