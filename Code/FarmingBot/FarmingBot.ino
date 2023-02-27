@@ -16,12 +16,15 @@
 
 RTC_DS1307 rtc;                     // init RTC obj
 LiquidCrystal_I2C lcd(0x3F, 16, 2); // init LCD obj
+int[] timings = {8, 45, 47, 7, 19};
+int sens1 = 0;
+int sens2 = 0;
+boolean timeout = true;
 
 void setup()
 {
   // pumpon hour, pumpon minute, pumpoff minute, lighton hour, lightoff hour
-
-  int[] timings = {8, 45, 47, 7, 19} lcd.init();
+  lcd.init();
   lcd.backlight();
   pinMode(pump, OUTPUT);
   pinMode(lights, OUTPUT);
@@ -34,9 +37,6 @@ void setup()
   //   while (1) delay(10);
   // }.
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
-  int sens1 = 0;
-  int sens2 = 0;
-  boolean timeout = true;
 }
 
 boolean isntWet()
@@ -49,7 +49,6 @@ boolean isntWet()
   Serial.println(avg);
   lcd.print("AVG: ");
   lcd.print(avg);
-
   return (avg > threshold); // if avg is greater than threshold, return true
 }
 
@@ -105,8 +104,6 @@ void loop()
   {
     digitalWrite(pump, HIGH);
   }
-  int sens1 = analogRead(A0);
-  int sens2 = analogRead(A1);
   float avg = (sens1 + sens2) / 2;
   lcd.setCursor(0, 0);
   lcd.print("AVG: ");

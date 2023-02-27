@@ -1,5 +1,16 @@
 const express = require('express');
-var cors = require('cors')
+const cors = require('cors')
+const { MongoClient } = require("mongodb");
+require('dotenv').config()
+const uri = process.env.URI;
+//console.log(uri)
+const client = new MongoClient(uri);
+try {
+  client.connect();
+} catch (e) {
+  console.error(e);
+}
+const db = client.db("sensdata");
 const app = express();
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
@@ -13,11 +24,6 @@ const PORT = 3000;
 app.use(express.json());
 app.use(cors())
 port.setDefaultEncoding('utf8')
-app.get('/test', (req, res) => {
-    res.status(200).send('Hello World!');
-    console.log(req.query)
-});
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
@@ -82,5 +88,12 @@ function checkReponse(){
 }
 
 parser.on('data', data =>{
-  console.log(data);
+  if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]"){
+    const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0])
+    const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1])
+    const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
+    db.collection("sensdata").insertOne({sens1: sens1, sens2: sens2, avg: avg, timestamp: new Date() });
+    //create a new document in the collection sensdata with sens1 and sens2 and the current time as the timestamp
+  }
 });
+  

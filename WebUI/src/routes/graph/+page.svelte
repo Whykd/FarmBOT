@@ -1,5 +1,1 @@
-<script lang="ts">
-    import type { PageData } from './$types';
-    
-    export let data: PageData;
-</script>
+<iframe style="background: #FFFFFF;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-farmbot-zzpze/embed/charts?id=63fbef6b-e2eb-48a1-80ca-9f528e66358d&maxDataAge=3600&theme=light&autoRefresh=true"></iframe>
