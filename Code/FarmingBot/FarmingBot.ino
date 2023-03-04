@@ -34,18 +34,15 @@ void setup()
   //  Serial.println("Couldn't find RTC");
   //   while (1) delay(10);
   // }.
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
+  // rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
 }
 
 boolean isntWet()
 {
   sens1 = analogRead(A0);
-  Serial.println(sens1);
   sens2 = analogRead(A1);
-  Serial.println(sens2);
   float avg = (sens1 + sens2) / 2;
-  Serial.println(avg);
-  lcd.print("AVG: ");
+  lcd.printstr("AVG: ");
   lcd.print(avg);
   return (avg > threshold); // if avg is greater than threshold, return true
 }
@@ -55,7 +52,6 @@ boolean isNight()
   int hour = rtc.now().hour();
   if (hour >= timings[3] && hour <= timings[4])
   { // turns lights on from 7AM to 7PM
-    Serial.println("day");
     return true;
   }
   return false;
@@ -108,10 +104,6 @@ void loop()
   {
     digitalWrite(pump, HIGH);
   }
-  float avg = (sens1 + sens2) / 2;
-  lcd.setCursor(0, 0);
-  lcd.print("AVG: ");
-  lcd.print(avg);
   lcd.setCursor(0, 1);
   lcd.print(rtc.now().hour());
   lcd.print(":");
@@ -120,7 +112,7 @@ void loop()
   lcd.clear();
   //checkUpdates();
 
-  if ((time.minute() == 30 || time.minute() == 0) && timeout)
+  if (!(time.minute() == 30 || time.minute() == 0) && timeout)
   {
     sendData();
     timeout = false;
