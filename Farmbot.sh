@@ -57,6 +57,7 @@ if [ $1 == "-i" ]
   cd /Farmbot/WebUI || echo "Error: WebUI folder not found" && exit
   npm install
   npm run build
+  exit
 fi
 
 # run the webui and nodeapi with pm2
@@ -69,6 +70,7 @@ if [ $1 == "-r" ]
   pm2 start index.js --name "WebUI" --watch
   pm2 save
   pm2 startup
+  exit
 fi
 
 # open the pm2 monitor
