@@ -13,9 +13,10 @@ try {
 }
 const db = client.db("sensdata");
 const app = express();
+//db.collection('sensdata').deleteMany({});
 const { SerialPort } = require("serialport");
 const { ReadlineParser } = require("@serialport/parser-readline");
-const port = new SerialPort({ path: "COM6", baudRate: 576000 }, function (err) {
+const port = new SerialPort({ path: sport, baudRate: 576000 }, function (err) {
 	if (err) {
 		return console.log("Error: ", err.message);
 	}
