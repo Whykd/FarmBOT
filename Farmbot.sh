@@ -43,7 +43,7 @@ if [ $1 == "-help" ]; then
 fi
 
 # check if the nodeAPI folder contains an .env file
-if [ ! -f "/FarmBOT/NodeAPI.env" ]
+if [ ! -f "/FarmBOT/NodeAPI/.env" ]
   then echo "Please add the .env file to the NodeAPI folder"
   exit
 fi
