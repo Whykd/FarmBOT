@@ -58,13 +58,27 @@ fi
 # run the webui and nodeapi with pm2
 if [ $1 == "-r" ]; then
   echo "Running the program"
-  cd NodeAPI/ || echo "Error: NodeAPI folder not found" && exit
-  pm2 start index.js --name "NodeAPI" --watch && echo "NodeAPI started" || echo "Error starting NodeAPI" && exit
-  cd ../WebUI/build/  || echo "Error: build folder not found" && exit
-  pm2 start index.js --name "WebUI" --watch && echo "WebUI started" || echo "Error starting webUI" && exit
+  cd NodeAPI/ || { echo "Error: NodeAPI folder not found"; exit 1; }
+  pm2 start index.js --name "NodeAPI" --watch
+  if [ $? -eq 0 ]; then
+    echo "NodeAPI started"
+  else
+    echo "Error starting NodeAPI"
+    exit 1
+  fi
+
+  cd ../WebUI/build/ || { echo "Error: build folder not found"; exit 1; }
+  pm2 start index.js --name "WebUI" --watch
+  if [ $? -eq 0 ]; then
+    echo "WebUI started"
+  else
+    echo "Error starting WebUI"
+    exit 1
+  fi
+
   pm2 save
   pm2 startup
-  echo "Program started use -m to open the monitor mode"
+  echo "Program started, use -m to open the monitor mode"
   exit
 fi
 
