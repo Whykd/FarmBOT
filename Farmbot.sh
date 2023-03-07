@@ -22,12 +22,12 @@ fi
 
 # check if the user has provided an argument
 if [ $# -eq 0 ]
-  then echo "No arguments supplied"
+  then echo "No arguments supplied please use -h for help"
   exit
 fi
 
 # check if the user has provided the correct argument
-if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-h" ]
+if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-h" ] && [ $1 != "-m" ]
   then echo "Incorrect argument supplied"
   exit
 fi
@@ -62,10 +62,10 @@ fi
 if [ $1 == "-r" ]
   then echo "Running the program"
   cd /FarmBOT/NodeAPI || echo "Error: NodeAPI folder not found" && exit
-  pm2 start index.js --name "NodeAPI" --watch
+  pm2 start index.js --name "NodeAPI" --watch && echo "NodeAPI started" echo "Error starting NodeAPI" && exit
   cd /FarmBOT/WebUI || echo "Error: WebUI folder not found" && exit
   cd /build || echo "Error: build folder not found" && exit
-  pm2 start index.js --name "WebUI" --watch
+  pm2 start index.js --name "WebUI" --watch && echo "WebUI started" echo "Error starting webUI" && exit
   pm2 save
   pm2 startup
   exit
