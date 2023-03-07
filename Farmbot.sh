@@ -61,10 +61,10 @@ fi
 # run the webui and nodeapi with pm2
 if [ $1 == "-r" ]
   then echo "Running the program"
-  cd /FarmBOT/NodeAPI || echo "Error: NodeAPI folder not found" && exit
+  cd NodeAPI/ || echo "Error: NodeAPI folder not found" && exit
   pm2 start index.js --name "NodeAPI" --watch && echo "NodeAPI started" || echo "Error starting NodeAPI" && exit
-  cd /FarmBOT/WebUI || echo "Error: WebUI folder not found" && exit
-  cd /build || echo "Error: build folder not found" && exit
+  cd WebUI/ || echo "Error: WebUI folder not found" && exit
+  cd build/ || echo "Error: build folder not found" && exit
   pm2 start index.js --name "WebUI" --watch && echo "WebUI started" || echo "Error starting webUI" && exit
   pm2 save
   pm2 startup
