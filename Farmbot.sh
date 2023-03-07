@@ -46,9 +46,9 @@ fi
 # install required packages on alpine linux
 if [ $1 == "-i" ]
   then echo "Installing required packages"
-  apk update
-  apk add nodejs  -Y
-  apk add npm -Y
+  pacman -Syu
+  pacman -S nodejs  -Y
+  pacman -S npm -Y
   npm install pm2@latest -g
   # setting up environment
   echo "Setting up environment"
