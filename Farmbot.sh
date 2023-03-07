@@ -18,6 +18,11 @@ if [ ! -d "/FarmBOT" ]
   then echo "Please move the folder to the root directory"
   exit
 fi
+# check if the FarmBot folder contains an .env file
+if [ ! -f "/FarmBOT/.env" ]
+  then echo "Please add the .env file to the FarmBOT folder"
+  exit
+fi
 
 
 # check if the user has provided an argument
@@ -46,7 +51,7 @@ fi
 # install required packages on alpine linux
 if [ $1 == "-i" ]; then
   echo "Installing required packages"
-  pacman -Syu nodejs npm -y
+  pacman -Syu nodejs npm --noconfirm
   npm install pm2@latest -g
   # setting up environment
   echo "Setting up environment"
