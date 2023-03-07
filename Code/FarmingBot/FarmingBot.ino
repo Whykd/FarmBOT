@@ -112,7 +112,7 @@ void loop()
   lcd.clear();
   //checkUpdates();
 
-  if (!(time.minute() == 30 || time.minute() == 0) && timeout)
+  if ((time.minute() == 30 || time.minute() == 0) && timeout)
   {
     sendData();
     timeout = false;
