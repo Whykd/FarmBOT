@@ -33,8 +33,8 @@ if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-h" ] && [ $1 != "-m" ]
 fi
 
 # display help
-if [ $1 == "-h" ]
-  then echo "This script is designed to be run on a Raspberry Pi with a arduino connected to it."
+if [ $1 == "-h" ]; then
+  echo "This script is designed to be run on a Raspberry Pi with a arduino connected to it."
   echo "The script can be run with the following arguments:"
   echo "-i for installing required packages and setting up environment"
   echo "-r for running the program"
@@ -44,23 +44,20 @@ if [ $1 == "-h" ]
 fi
 
 # install required packages on alpine linux
-if [ $1 == "-i" ]
-  then echo "Installing required packages"
+if [ $1 == "-i" ]; then
+  echo "Installing required packages"
   pacman -Syu nodejs npm -y
   npm install pm2@latest -g
   # setting up environment
   echo "Setting up environment"
-  cd /NodeAPI || echo "Error: NodeAPI folder not found" && exit
-  npm install
-  cd ../WebUI || echo "Error: WebUI folder not found" && exit
-  npm install
-  npm run build
+  cd NodeAPI/ && npm install && cd ../WebUI && npm install && npm run build || echo "Issue happend durring installation " && exit
+  echo "Environment setup complete"
   exit
 fi
 
 # run the webui and nodeapi with pm2
-if [ $1 == "-r" ]
-  then echo "Running the program"
+if [ $1 == "-r" ]; then
+  echo "Running the program"
   cd NodeAPI/ || echo "Error: NodeAPI folder not found" && exit
   pm2 start index.js --name "NodeAPI" --watch && echo "NodeAPI started" || echo "Error starting NodeAPI" && exit
   cd ../WebUI/build/  || echo "Error: build folder not found" && exit
@@ -72,8 +69,8 @@ if [ $1 == "-r" ]
 fi
 
 # open the pm2 monitor
-if [ $1 == "-m" ]
-  then echo "Opening monitor mode"
+if [ $1 == "-m" ]; then
+  echo "Opening monitor mode"
   pm2 monit
 fi
 
