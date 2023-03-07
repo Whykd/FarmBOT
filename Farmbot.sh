@@ -50,9 +50,9 @@ if [ $1 == "-i" ]
   npm install pm2@latest -g
   # setting up environment
   echo "Setting up environment"
-  cd /FarmBOT/NodeAPI || echo "Error: NodeAPI folder not found" && exit
+  cd /NodeAPI || echo "Error: NodeAPI folder not found" && exit
   npm install
-  cd /FarmBOT/WebUI || echo "Error: WebUI folder not found" && exit
+  cd ../WebUI || echo "Error: WebUI folder not found" && exit
   npm install
   npm run build
   exit
@@ -63,11 +63,11 @@ if [ $1 == "-r" ]
   then echo "Running the program"
   cd NodeAPI/ || echo "Error: NodeAPI folder not found" && exit
   pm2 start index.js --name "NodeAPI" --watch && echo "NodeAPI started" || echo "Error starting NodeAPI" && exit
-  cd WebUI/ || echo "Error: WebUI folder not found" && exit
-  cd build/ || echo "Error: build folder not found" && exit
+  cd ../WebUI/build/  || echo "Error: build folder not found" && exit
   pm2 start index.js --name "WebUI" --watch && echo "WebUI started" || echo "Error starting webUI" && exit
   pm2 save
   pm2 startup
+  echo "Program started use -m to open the monitor mode"
   exit
 fi
 
