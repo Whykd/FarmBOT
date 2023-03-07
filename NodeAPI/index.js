@@ -22,7 +22,7 @@ const port = new SerialPort({ path: sport, baudRate: 576000 }, function (err) {
 	}
 });
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n" }));
-const PORT = 3000;
+const PORT = 4000;
 app.use(express.json());
 app.use(cors());
 port.setDefaultEncoding("utf8");
