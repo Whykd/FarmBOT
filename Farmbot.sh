@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # Farmbot.sh
 # This script is designed to be run on a Raspberry Pi with a arduino connected to it.
 
@@ -46,9 +46,7 @@ fi
 # install required packages on alpine linux
 if [ $1 == "-i" ]
   then echo "Installing required packages"
-  pacman -Syu
-  pacman -S nodejs  -Y
-  pacman -S npm -Y
+  pacman -Syu nodejs npm -y
   npm install pm2@latest -g
   # setting up environment
   echo "Setting up environment"
