@@ -34,7 +34,7 @@ void setup()
   //  Serial.println("Couldn't find RTC");
   //   while (1) delay(10);
   // }.
-  // rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
+   rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
 }
 
 boolean isntWet()
