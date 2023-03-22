@@ -34,7 +34,9 @@ void setup()
   //  Serial.println("Couldn't find RTC");
   //   while (1) delay(10);
   // }.
-   rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
+//  rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
+  isntWet();
+  sendData();
 }
 
 boolean isntWet()
@@ -58,20 +60,36 @@ boolean isNight()
 }
 
 //to fix later
-//void checkUpdates()
-//{
-//  if (Serial.available() > 0)
-//  {
-//    Serial.print("OK");
-//    Serial.println();
-//    String output;
-//    output = Serial.readString();
-//    if (output.substring(0, 1) == "1")
-//    {
-//      timings = output.substring(1, output.length());
-//    }
-//  }
-//}
+void checkUpdates()
+{
+  if (Serial.available() > 0)
+  {
+    Serial.print("OK");
+    Serial.println();
+    String output;
+    output = Serial.readString();
+    int arr[5];
+    if (output.substring(0, 1) == "1")
+    {
+      String str = output.substring(1,str.length());
+      int index = 0;
+      str.remove(0,1);
+      str.remove(str.length()-1);
+      while(str.length() > 0){
+        int pos = str.indexOf(",");
+        if(pos == -1){
+          arr[index] = str.toInt();
+          break;
+        }
+        String substr = str.substring(0, pos);
+        arr[index] = substr.toInt();
+        str.remove(0, pos + 1);
+        index++;
+      }
+      memcpy(timings, arr, sizeof(arr[0])*5);
+    }
+  }
+}
 
 void sendData()
 {
@@ -110,7 +128,7 @@ void loop()
   lcd.print(rtc.now().minute());
   delay(1000);
   lcd.clear();
-  //checkUpdates();
+  checkUpdates();
 
   if ((time.minute() == 30 || time.minute() == 0) && timeout)
   {
