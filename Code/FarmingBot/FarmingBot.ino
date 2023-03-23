@@ -126,17 +126,12 @@ void loop()
   lcd.print(rtc.now().hour());
   lcd.print(":");
   lcd.print(rtc.now().minute());
-  delay(1000);
-  lcd.clear();
   checkUpdates();
 
-  if ((time.minute() == 30 || time.minute() == 0) && timeout)
+  if ((time.minute() == 30 || time.minute() == 0) && time.second() > 57)
   {
     sendData();
-    timeout = false;
   }
-  else
-  {
-    timeout = true;
-  }
+  delay(1000);
+  lcd.clear();
 }
