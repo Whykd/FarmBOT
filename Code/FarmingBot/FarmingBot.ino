@@ -125,7 +125,13 @@ void loop()
   lcd.setCursor(0, 1);
   lcd.print(rtc.now().hour());
   lcd.print(":");
-  lcd.print(rtc.now().minute());
+  if(rtc.now().minute()<10){
+    lcd.print("0");
+    lcd.print(rtc.now().minute());
+  }
+  else{
+    lcd.print(rtc.now().minute());
+  }
   checkUpdates();
 
   if ((time.minute() == 30 || time.minute() == 0) && time.second() > 57)
