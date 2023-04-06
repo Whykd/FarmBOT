@@ -1,1 +1,1 @@
-<embed type="text/html" src="localhost:8081" width="640" height="480 ">
+<embed type="text/html" src="10.20.180.61:8081/?action=stream" width="640" height="480 ">
