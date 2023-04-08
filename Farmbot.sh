@@ -139,9 +139,10 @@ function start(){
 }
 
 function init() {
-  pacman -Syu nodejs npm --noconfirm
+  pacman -Syu nodejs npm motion --noconfirm
   npm install pm2@latest -g
   # setting up environment
+  sudo systemctl enable motion
   if [ $verbose == "true" ]; then
     echo "Setting up environment"
   fi
