@@ -33,13 +33,13 @@ if [ $# -eq 0 ]
   then echo "No arguments supplied please use -h for help"
   exit
 fi
-if [ $2 == "-v" ]; then
-  if [ $3 == "1" ]; then
+if [ $2 == "-v" ];then
+  if [ $3 == "1" ];then
     verbose="false"
     exec 1>/dev/null
-  elif [ $3 == "2" ]; then
+  elif [ $3 == "2" ];then
     verbose="false"
-  elif [ $3 == "3" ]; then
+  elif [ $3 == "3" ];then
     verbose="true"
   else
     echo "Incorrect verbose level supplied"
@@ -51,59 +51,6 @@ fi
 # check if the user has provided the correct argument
 if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-m" ] && [ $1 != "-u" ] && [ $1 != "-fu" ] && [ $1 != "-h" ] && [ $1 != "-init" ] && [ $1 != "-start" ] && [ $1 != "-monit" ] && [ $1 != "-update" ] && [ $1 != "-fullupdate" ] && [ $1 != "-help" ]; then
   echo "Incorrect argument supplied"
-  exit
-fi
-
-# **************************************************** #
-#                     "frontend"                       #
-# **************************************************** #
-
-
-# display help
-if [ $1 == "-help" ] && [ $1 == "-h"]; then
-  help
-  exit
-fi
-
-# check if the nodeAPI folder contains an .env file
-if [ ! -f "/FarmBOT/NodeAPI/.env" ]
-  then echo "Please add the .env file to the NodeAPI folder"
-  exit
-fi
-
-# install required packages on alpine linux
-if [ $1 == "-init" ] || [ $1 == "-i"]; then
-  echo "Installing required packages"
-  init
-  exit
-fi
-
-# run the webui and nodeapi with pm2
-if [ $1 == "-start" ] || [ $1 == "-r"]; then
-  echo "Running the program"
-  start
-  exit
-fi
-
-# open the pm2 monitor
-if [ $1 == "-monit"] || [ $1 == "-m"]; then
-  echo "Opening monitor mode"
-  pm2 monit
-fi
-
-# updates the script from github by saving the .env file in the NodeAPI folder into a temp folder, delteing the Farmbot folder, pulling the latest version from github and then moving the .env file back into the NodeAPI folder
-
-if [ $1 == "-update" ] || [ $1 == "u"]; then
-  echo "Updating script"
-  update
-  echo "Script updated"
-  exit
-fi
-
-if [ $1 == "-fullupdate" ] || [ $1 == "-fu"]; then
-  echo "Updating script"
-  fullupdate
-  echo "Script updated"
   exit
 fi
 
@@ -125,8 +72,8 @@ function start(){
 
   cd ../WebUI/build/ || { echo "Error: build folder not found"; exit 1; }
   pm2 start index.js --name "WebUI" --watch
-  if [ $? -eq 0 ]; then
-    if [ $verbose == "true" ]; then
+  if [ $? -eq 0 ];then
+    if [ $verbose == "true" ];then
       echo "WebUI started"
     fi
   else
@@ -186,3 +133,56 @@ function help(){
   echo
   echo "    example: ./Farmbot.sh -i -vt 3"
 }
+
+# **************************************************** #
+#                     "frontend"                       #
+# **************************************************** #
+
+
+# display help
+if [[ $1 == "-help" ]] || [[ $1 == "-h" ]];then
+  help
+  exit
+fi
+
+# check if the nodeAPI folder contains an .env file
+if [ ! -f "/FarmBOT/NodeAPI/.env" ]
+  then echo "Please add the .env file to the NodeAPI folder"
+  exit
+fi
+
+# install required packages on alpine linux
+if [[ $1 == "-init" ]] || [[ $1 == "-i" ]];then
+  echo "Installing required packages"
+  init
+  exit
+fi
+
+# run the webui and nodeapi with pm2
+if [[ $1 == "-start" ] || [ $1 == "-r" ]];then
+  echo "Running the program"
+  start
+  exit
+fi
+
+# open the pm2 monitor
+if [[ $1 == "-monit" ]] || [[ $1 == "-m" ]];then
+  echo "Opening monitor mode"
+  pm2 monit
+fi
+
+# updates the script from github by saving the .env file in the NodeAPI folder into a temp folder, delteing the Farmbot folder, pulling the latest version from github and then moving the .env file back into the NodeAPI folder
+
+if [[ $1 == "-update" ]] || [[ $1 == "u" ]];then
+  echo "Updating script"
+  update
+  echo "Script updated"
+  exit
+fi
+
+if [[ $1 == "-fullupdate" ]] || [[ $1 == "-fu" ]];then
+  echo "Updating script"
+  fullupdate
+  echo "Script updated"
+  exit
+fi
