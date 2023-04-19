@@ -19,6 +19,7 @@ int timings[] = {8, 45, 47, 7, 19};
 int sens1 = 0;
 int sens2 = 0;
 boolean timeout = true;
+boolean bucketHasWater = true;
 
 void setup()
 {
@@ -97,6 +98,12 @@ void sendData()
   Serial.print(sens1);
   Serial.print(",");
   Serial.print(sens2);
+  Serial.print(",");
+  Serial.print(time.hour());
+  Serial.print(",");
+  Serial.print(time.minute());
+  Serial.print(",");
+  Serial.print(bucketHasWater);
   Serial.print("]");
   Serial.println();
 }

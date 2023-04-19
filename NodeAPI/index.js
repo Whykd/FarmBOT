@@ -23,6 +23,9 @@ const port = new SerialPort({ path: sport, baudRate: 57600 }, function (err) {
 });
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n" }));
 const PORT = 4000;
+
+let bucketHasWater = false;
+
 app.use(express.json());
 app.use(cors());
 port.setDefaultEncoding("utf8");
@@ -86,10 +89,20 @@ function checkReponse() {
 	});
 }
 
+app.get("/getdata", async (req, res) => {
+	res.json({
+		bucket : bucketHasWater,
+	})
+});
+
+
 parser.on("data", (data) => {
 	if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]") {
 		const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0]);
 		const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
+		console.log("Hour: " + data.split("[")[1].split("]")[0].split(",")[2]);
+		console.log("Min: " + data.split("[")[1].split("]")[0].split(",")[3]);
+		bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == true);
 		const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
 		db.collection("sensdata").insertOne({
 			sens1: sens1,
