@@ -102,7 +102,7 @@ parser.on("data", (data) => {
 		const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
 		console.log("Hour: " + data.split("[")[1].split("]")[0].split(",")[2]);
 		console.log("Min: " + data.split("[")[1].split("]")[0].split(",")[3]);
-		bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == true);
+		bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == "1");
 		const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
 		db.collection("sensdata").insertOne({
 			sens1: sens1,
@@ -110,6 +110,21 @@ parser.on("data", (data) => {
 			avg: avg,
 			timestamp: new Date(),
 		});
+
+		if (data.split("[")[1].split("]")[0].split(",")[2] != new Date().getHours() || data.split("[")[1].split("]")[0].split(",")[3] != new Date().getMinutes()){
+			syncClock();
+		}
+
 		//create a new document in the collection sensdata with sens1 and sens2 and the current time as the timestamp
 	}
 });
+function syncClock() {
+	const date = new Date();
+	const hour = date.getHours();
+	const min = date.getMinutes();
+	const output = 0 + "[" + hour + "," + min + "]";
+	port.write(output);
+	if(checkReponse() != 1){
+		console.log("Clock Not Synced")
+	}
+}

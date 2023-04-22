@@ -69,9 +69,9 @@ void checkUpdates()
     Serial.println();
     String output;
     output = Serial.readString();
-    int arr[5];
     if (output.substring(0, 1) == "1")
     {
+      int arr[5];
       String str = output.substring(1,str.length());
       int index = 0;
       str.remove(0,1);
@@ -88,6 +88,26 @@ void checkUpdates()
         index++;
       }
       memcpy(timings, arr, sizeof(arr[0])*5);
+    }
+    else if (output.substring(0, 1) == "2"){
+      int arr[2];
+      String str = output.substring(1,str.length());
+      int index = 0;
+      str.remove(0,1);
+      str.remove(str.length()-1);
+      while(str.length() > 0){
+        int pos = str.indexOf(",");
+        if(pos == -1){
+          arr[index] = str.toInt();
+          break;
+        }
+        String substr = str.substring(0, pos);
+        arr[index] = substr.toInt();
+        str.remove(0, pos + 1);
+        index++;
+      }
+      rtc.setHours(arr[0]);
+      rtc.setMinutes(arr[1]);
     }
   }
 }
@@ -112,21 +132,17 @@ void loop()
 {
   isntWet();
   bool night = isNight();
-  if (night)
-  {
+  if (night){
     digitalWrite(lights, LOW); // turns lights on
   }
-  else
-  {
+  else{
     digitalWrite(lights, HIGH); // turns lights off
   }
   DateTime time = rtc.now();
-  if (time.hour() == timings[0] && time.minute() >= timings[1] && time.minute() <= timings[2])
-  {
+  if (time.hour() == timings[0] && time.minute() >= timings[1] && time.minute() <= timings[2]){
     digitalWrite(pump, LOW);
   }
-  else
-  {
+  else{
     digitalWrite(pump, HIGH);
   }
   lcd.setCursor(0, 1);
@@ -141,8 +157,7 @@ void loop()
   }
   checkUpdates();
 
-  if ((time.minute() == 30 || time.minute() == 0) && time.second() > 57)
-  {
+  if ((time.minute() == 30 || time.minute() == 0) && time.second() > 57){
     sendData();
   }
   delay(1000);

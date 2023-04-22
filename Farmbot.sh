@@ -33,13 +33,13 @@ if [ $# -eq 0 ]
   then echo "No arguments supplied please use -h for help"
   exit
 fi
-if [ $2 == "-v" ];then
-  if [ $3 == "1" ];then
+if [ $2 == "-v" ]; then
+  if [ $3 == "1" ]; then
     verbose="false"
     exec 1>/dev/null
-  elif [ $3 == "2" ];then
+  elif [ $3 == "2" ]; then
     verbose="false"
-  elif [ $3 == "3" ];then
+  elif [ $3 == "3" ]; then
     verbose="true"
   else
     echo "Incorrect verbose level supplied"
@@ -49,7 +49,7 @@ if [ $2 == "-v" ];then
 fi
 
 # check if the user has provided the correct argument
-if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-m" ] && [ $1 != "-u" ] && [ $1 != "-fu" ] && [ $1 != "-h" ] && [ $1 != "-init" ] && [ $1 != "-start" ] && [ $1 != "-monit" ] && [ $1 != "-update" ] && [ $1 != "-fullupdate" ] && [ $1 != "-help" ]; then
+if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-m" ] && [ $1 != "-u" ] && [ $1 != "-fu" ] && [ $1 != "-h" ] && && [ $1 != "-su" ] && [ $1 != "-f" ] [ $1 != "-init" ] && [ $1 != "-start" ] && [ $1 != "-monit" ] && [ $1 != "-update" ] && [ $1 != "-fullupdate" ] && [ $1 != "-help" ] && [ $1 != "-setup" ] && [ $1 != "-flash" ]; then
   echo "Incorrect argument supplied"
   exit
 fi
@@ -57,9 +57,29 @@ fi
 # **************************************************** #
 #                     "backend"                        #
 # **************************************************** #
+function setup(){
+  pacman -Syu nodejs npm motion git --noconfirm
+  npm install pm2@latest -g
+  systemctl enable motion
+  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+}
+
+function flash(){
+  if [ $verbose == "true" ]; then
+    echo "Flashing arduino"
+  fi
+  arduino-cli upgrade
+  arduino-cli cache clean
+  if [ $verbose == "true" ]; then
+    echo "Compiling and uploading arduino code"
+  fi
+  arduino-cli compile -b arduino:avr:uno /FarmBOT/Code/FarmingBot
+  arduino-cli upload /FarmBOT/Code/FarmingBot
+}
+
 
 function start(){
-  cd NodeAPI/ || { echo "Error: NodeAPI folder not found"; exit 1; }
+  cd /FarmBOT/NodeAPI/ || { echo "Error: NodeAPI folder not found"; exit 1; }
   pm2 start index.js --name "NodeAPI" --watch
   if [ $? -eq 0 ]; then
     if [ $verbose == "true" ]; then
@@ -70,7 +90,7 @@ function start(){
     exit 1
   fi
 
-  cd ../WebUI/build/ || { echo "Error: build folder not found"; exit 1; }
+  cd /FarmBOT/WebUI/build/ || { echo "Error: build folder not found"; exit 1; }
   pm2 start index.js --name "WebUI" --watch
   if [ $? -eq 0 ];then
     if [ $verbose == "true" ];then
@@ -86,14 +106,10 @@ function start(){
 }
 
 function init() {
-  pacman -Syu nodejs npm motion --noconfirm
-  npm install pm2@latest -g
-  # setting up environment
-  sudo systemctl enable motion
   if [ $verbose == "true" ]; then
     echo "Setting up environment"
   fi
-  cd NodeAPI/ && npm install && cd ../WebUI && npm install && npm run build || echo "Issue happend durring installation " && exit
+  cd /FarmBOT/NodeAPI/ && npm install && cd /FarmBOT/WebUI && npm install && npm run build || echo "Issue happend durring installation " && exit
   if [ $verbose == "true" ]; then
     echo "Environment setup complete"
   fi
@@ -145,6 +161,11 @@ if [[ $1 == "-help" ]] || [[ $1 == "-h" ]];then
   exit
 fi
 
+if [[ $1 == "-setup" ]] || [[ $1 == "-su" ]];then
+  setup
+  exit
+fi
+
 # check if the nodeAPI folder contains an .env file
 if [ ! -f "/FarmBOT/NodeAPI/.env" ]
   then echo "Please add the .env file to the NodeAPI folder"
@@ -158,8 +179,15 @@ if [[ $1 == "-init" ]] || [[ $1 == "-i" ]];then
   exit
 fi
 
+
+
+if [[ $1 == "-flash" ]] || [[ $1 == "-f" ]];then
+  flash
+  exit
+fi
+
 # run the webui and nodeapi with pm2
-if [[ $1 == "-start" ] || [ $1 == "-r" ]];then
+if [[ $1 == "-start" ]] || [[ $1 == "-r" ]];then
   echo "Running the program"
   start
   exit
