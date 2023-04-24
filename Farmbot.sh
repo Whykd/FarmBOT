@@ -33,23 +33,27 @@ if [ $# -eq 0 ]
   then echo "No arguments supplied please use -h for help"
   exit
 fi
-if [ $2 == "-v" ]; then
-  if [ $3 == "1" ]; then
-    verbose="false"
-    exec 1>/dev/null
-  elif [ $3 == "2" ]; then
-    verbose="false"
-  elif [ $3 == "3" ]; then
-    verbose="true"
-  else
-    echo "Incorrect verbose level supplied"
-    exit
-  fi
-  verbose="true"
-fi
+#if [ $2 == "-v" ]; then
+#  if [ $3 == "1" ]; then
+#    verbose="false"
+#    exec 1>/dev/null
+#  elif [ $3 == "2" ]; then
+#    verbose="false"
+#  elif [ $3 == "3" ]; then
+#    verbose="true"
+#  else
+#    echo "Incorrect verbose level supplied"
+#    exit
+#  fi
+#  verbose="true"
+#fi
 
 # check if the user has provided the correct argument
-if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-m" ] && [ $1 != "-u" ] && [ $1 != "-fu" ] && [ $1 != "-h" ] && && [ $1 != "-su" ] && [ $1 != "-f" ] [ $1 != "-init" ] && [ $1 != "-start" ] && [ $1 != "-monit" ] && [ $1 != "-update" ] && [ $1 != "-fullupdate" ] && [ $1 != "-help" ] && [ $1 != "-setup" ] && [ $1 != "-flash" ]; then
+if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-m" ] && [ $1 != "-u" ] && [ $1 != "-fu" ] && [ $1 != "-h" ]; then
+  echo "Incorrect argument supplied"
+  exit
+fi
+if [ $1 != "-su" ] && [ $1 != "-f" ] [ $1 != "-init" ] && [ $1 != "-start" ] && [ $1 != "-monit" ] && [ $1 != "-update" ] && [ $1 != "-fullupdate" ] && [ $1 != "-help" ] && [ $1 != "-setup" ] && [ $1 != "-flash" ]; then
   echo "Incorrect argument supplied"
   exit
 fi
@@ -58,10 +62,10 @@ fi
 #                     "backend"                        #
 # **************************************************** #
 function setup(){
-  pacman -Syu nodejs npm motion git --noconfirm
+  pacman -Syu nodejs npm motion git arduino-cli --noconfirm
   npm install pm2@latest -g
   systemctl enable motion
-  curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
+  arduino-cli core install arduino:avr
 }
 
 function flash(){
