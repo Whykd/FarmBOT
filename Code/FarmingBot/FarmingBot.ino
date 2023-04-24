@@ -119,9 +119,9 @@ void sendData()
   Serial.print(",");
   Serial.print(sens2);
   Serial.print(",");
-  Serial.print(time.hour());
+  Serial.print(rtc.now().hour());
   Serial.print(",");
-  Serial.print(time.minute());
+  Serial.print(rtc.now().minute()); 
   Serial.print(",");
   Serial.print(bucketHasWater);
   Serial.print("]");
