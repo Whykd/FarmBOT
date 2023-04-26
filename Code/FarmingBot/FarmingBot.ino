@@ -106,8 +106,7 @@ void checkUpdates()
         str.remove(0, pos + 1);
         index++;
       }
-      rtc.setHours(arr[0]);
-      rtc.setMinutes(arr[1]);
+      rtc.adjust(DateTime(23, 4, 26, arr[0], arr[1], 0)); //sets minutes and hours to correct time 
     }
   }
 }
