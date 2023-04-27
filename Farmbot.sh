@@ -49,11 +49,11 @@ fi
 #fi
 
 # check if the user has provided the correct argument
-if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-m" ] && [ $1 != "-u" ] && [ $1 != "-fu" ] && [ $1 != "-h" ]; then
+if [ $1 != "-i" ] && [ $1 != "-r" ] && [ $1 != "-m" ] && [ $1 != "-u" ] && [ $1 != "-fu" ] && [ $1 != "-h" ] && [ $1 != "-su" ] && [ $1 != "-f" ] ; then
   echo "Incorrect argument supplied"
   exit
 fi
-if [ $1 != "-su" ] && [ $1 != "-f" ] [ $1 != "-init" ] && [ $1 != "-start" ] && [ $1 != "-monit" ] && [ $1 != "-update" ] && [ $1 != "-fullupdate" ] && [ $1 != "-help" ] && [ $1 != "-setup" ] && [ $1 != "-flash" ]; then
+if [ $1 != "-init" ] && [ $1 != "-start" ] && [ $1 != "-monit" ] && [ $1 != "-update" ] && [ $1 != "-fullupdate" ] && [ $1 != "-help" ] && [ $1 != "-setup" ] && [ $1 != "-flash" ]; then
   echo "Incorrect argument supplied"
   exit
 fi
