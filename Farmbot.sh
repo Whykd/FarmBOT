@@ -66,6 +66,9 @@ function setup(){
   npm install pm2@latest -g
   systemctl enable motion
   arduino-cli core install arduino:avr
+  arduino-cli lib install RTClib
+  arduino-cli lib install 'LiquidCrystal I2C'
+
 }
 
 function flash(){
@@ -120,6 +123,7 @@ function init() {
 }
 function update() {
   mkdir -p /tmp/FarmBOT
+  touch /FarmBOT/NodeAPI/.env
   cp /FarmBOT/NodeAPI/.env /tmp/FarmBOT/.env
   rm -rf /FarmBOT
   git clone $repolocation /FarmBOT
