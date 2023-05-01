@@ -82,6 +82,7 @@ function flash(){
 
 
 function start(){
+  pm2 delete all
   cd /FarmBOT/NodeAPI/ || { echo "Error: NodeAPI folder not found"; exit 1; }
   pm2 start index.js --name "NodeAPI" --watch
   if [ $? -eq 0 ]; then
