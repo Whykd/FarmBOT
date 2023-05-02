@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { MongoClient } = require("mongodb");
+const schedule = require('node-schedule');
 require("dotenv").config();
 const uri = process.env.URI;
 const sport = process.env.SPORT;
@@ -24,6 +25,7 @@ const port = new SerialPort({ path: sport, baudRate: 57600 }, function (err) {
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n" }));
 const PORT = 4000;
 
+let ardCounter = 0;
 let bucketHasWater = false;
 
 app.use(express.json());
@@ -97,6 +99,7 @@ app.get("/getdata", async (req, res) => {
 
 
 parser.on("data", (data) => {
+	ardCounter++;
 	if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]") {
 		const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0]);
 		const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
@@ -128,3 +131,10 @@ function syncClock() {
 		console.log("Clock Not Synced")
 	}
 }
+const job = schedule.scheduleJob('1 * * * *', () => { // run every hour at minute 1
+    if (ardCounter < 2){
+		port.close();
+		port.open();
+	}
+	ardCounter = 0;
+});
