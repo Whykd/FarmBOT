@@ -12,6 +12,8 @@
 #define lights 3      // light relay pin
 #define threshold 490 // threshold to change when pump is on or off
 
+//absolute jank reset
+void(* resetFunc) (void) = 0;
 
 RTC_DS1307 rtc;                     // init RTC obj
 LiquidCrystal_I2C lcd(0x3F, 16, 2); // init LCD obj
@@ -158,6 +160,7 @@ void loop()
 
   if ((time.minute() == 30 || time.minute() == 0) && time.second() > 57){
     sendData();
+    resetFunc(); //jank reset that hopefully works
   }
   delay(1000);
   lcd.clear();
