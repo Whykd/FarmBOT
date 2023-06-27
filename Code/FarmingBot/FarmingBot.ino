@@ -1,5 +1,5 @@
 #include <RTClib.h>            //Adafruit lib
-#include <LiquidCrystal_I2C.h> //By Marco Shwartz
+#include <LiquidCrystal_I2C.h> //By Frank de Brabander
 #include <Wire.h>
 
 // Farmbot code V2.0
@@ -14,7 +14,8 @@
 
 RTC_DS1307 rtc;                     // init RTC obj
 LiquidCrystal_I2C lcd(0x3F, 16, 2); // init LCD obj
-int timings[] = {8, 45, 47, 7, 19};
+//pump on/off hour, pump on min, pump off min, light on hour, light off hour 
+int timings[] = {8, 45, 47, 7, 19};  
 int sens1 = 0;
 int sens2 = 0;
 boolean timeout = true;
@@ -105,7 +106,7 @@ void checkUpdates()
         str.remove(0, pos + 1);
         index++;
       }
-      rtc.adjust(DateTime(23, 4, 26, arr[0], arr[1], 0)); //sets minutes and hours to correct time 
+      rtc.adjust(DateTime(23, 6, 26, arr[0], arr[1], 0)); //sets minutes and hours to correct time 
     }
   }
 }
@@ -155,7 +156,7 @@ void loop()
   }
   checkUpdates();
 
-  if ((time.minute() == 30 || time.minute() == 0) && time.second() > 57){
+  if ((time.minute() == 30 || time.minute() == 0) && time.second() > 58){
     sendData();
   }
   delay(1000);
