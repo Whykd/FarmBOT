@@ -1,6 +1,7 @@
 #include <RTClib.h>            //Adafruit lib
 #include <LiquidCrystal_I2C.h> //By Frank de Brabander
 #include <Wire.h>
+#include <ArduinoJson.h>       //by bblanchon
 
 // Farmbot code V2.0
 // ALL PINS ARE ON PCB DESIGN
@@ -19,7 +20,7 @@ int timings[] = {8, 45, 47, 7, 19};
 int sens1 = 0;
 int sens2 = 0;
 boolean timeout = true;
-boolean bucketHasWater = true;
+//boolean bucketHasWater = true;
 
 void setup()
 {
@@ -54,7 +55,7 @@ boolean isNight()
 {
   int hour = rtc.now().hour();
   if (hour >= timings[3] && hour <= timings[4])
-  { // turns lights on from 7AM to 7PM
+  { // turns lights on from start hour to end hour
     return true;
   }
   return false;
@@ -63,68 +64,40 @@ boolean isNight()
 //to fix later
 void checkUpdates()
 {
-  if (Serial.available() > 0)
+  if (Serial.available() == 0)
   {
-    Serial.print("OK");
-    Serial.println();
-    String output;
-    output = Serial.readString();
-    if (output.substring(0, 1) == "1")
-    {
-      int arr[5];
-      String str = output.substring(1,str.length());
-      int index = 0;
-      str.remove(0,1);
-      str.remove(str.length()-1);
-      while(str.length() > 0){
-        int pos = str.indexOf(",");
-        if(pos == -1){
-          arr[index] = str.toInt();
-          break;
-        }
-        String substr = str.substring(0, pos);
-        arr[index] = substr.toInt();
-        str.remove(0, pos + 1);
-        index++;
-      }
-      memcpy(timings, arr, sizeof(arr[0])*5);
+    StaticJsonDocument<96> doc;
+
+    DeserializationError error = deserializeJson(doc, Serial);
+
+    if (error) {
+     // add output on screen if error as serial bus is in use
+     return;
     }
-    else if (output.substring(0, 1) == "2"){
-      int arr[2];
-      String str = output.substring(1,str.length());
-      int index = 0;
-      str.remove(0,1);
-      str.remove(str.length()-1);
-      while(str.length() > 0){
-        int pos = str.indexOf(",");
-        if(pos == -1){
-          arr[index] = str.toInt();
-          break;
-        }
-        String substr = str.substring(0, pos);
-        arr[index] = substr.toInt();
-        str.remove(0, pos + 1);
-        index++;
-      }
-      rtc.adjust(DateTime(23, 6, 26, arr[0], arr[1], 0)); //sets minutes and hours to correct time 
-    }
+
+    int timings[0] = doc["wstarth"]; // water start hour
+    int timings[1] = doc["wstartm"]; // water start minute
+    int timings[2] = doc["wendm"];   // water end minute
+    int timings[3] = doc["lstartm"]; // light start minute
+    int timings[4] = doc["lendm"];   // light end minute
+
+    //rtc.adjust(DateTime(23, 6, 26, arr[0], arr[1], 0)); // sets rtc dont forget to add this back you moron (luke)
   }
+  
+
 }
 
 void sendData()
 {
-  Serial.print("[");
-  Serial.print(sens1);
-  Serial.print(",");
-  Serial.print(sens2);
-  Serial.print(",");
-  Serial.print(rtc.now().hour());
-  Serial.print(",");
-  Serial.print(rtc.now().minute()); 
-  Serial.print(",");
-  Serial.print(bucketHasWater);
-  Serial.print("]");
-  Serial.println();
+  StaticJsonDocument<24> doc;
+  DateTime now = rtc.now();
+  uint32_t timestamp = now.unixtime());
+
+  doc["sens1"] = sens1;
+  doc["sens2"] = sens2;
+  doc["time"] = timestamp;
+
+  serializeJson(doc, Serial);
 }
 
 void loop()

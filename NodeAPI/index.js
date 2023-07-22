@@ -26,7 +26,7 @@ const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n" }));
 const PORT = 4000;
 
 let ardCounter = 0;
-let bucketHasWater = false;
+// let bucketHasWater = false;
 
 app.use(express.json());
 app.use(cors());
@@ -38,103 +38,104 @@ app.listen(PORT, () => {
 app.post("/update", async (req, res) => {
 	const pf = req.body.passphrase;
 	const data = JSON.stringify(req.body.data);
-	let ln = 0;
-	if (data) {
-		ln = data.split("[")[1].split("]")[0].split(",").length;
-	}
+	// let ln = 0;
+	// if (data) {
+	// 	ln = data.split("[")[1].split("]")[0].split(",").length;
+	// }
 
-	if (pf == "PresFarmbotFOREVER") {
-		if (ln == 5) {
-			const output = 1 + data.substring(1, data.length - 1);
-			port.write(output);
-			checkReponse().then((result) => {
-				if (result == 0) {
-					//console.log("No Data Recieved By Arduino")
-					res.status(503).send("No Data Recieved By Arduino");
-					return;
-				}
-				if (result == 1) {
-					//console.log("Data Recieved By Arduino")
-					res.status(200).send("Data Recieved By Arduino");
-					return;
-				} else if (result == 2) {
-					//console.log("Bad Response From Arduino")
-					res.status(500).send("Bad Response From Arduino");
-					return;
-				} else {
-					//console.log("Internal Server Error 1")
-					res.status(500).send("Internal Server Error 1");
-					return;
-				}
-			});
-		} else {
-			//console.log("Bad Data")
-			res.status(417).send("Bad Data");
-			return;
-		}
-	} else {
-		//console.log("Incorect Passphrase")
-		res.status(401).send("Incorect Passphrase");
-		return;
-	}
+	// if (pf == process.env.PASSPHRASE) {
+	// 	if (ln == 5) {
+	// 		const output = 1 + data.substring(1, data.length - 1);
+	// 		port.write(output);
+	// 		checkReponse().then((result) => {
+	// 			if (result == 0) {
+	// 				//console.log("No Data Recieved By Arduino")
+	// 				res.status(503).send("No Data Recieved By Arduino");
+	// 				return;
+	// 			}
+	// 			if (result == 1) {
+	// 				//console.log("Data Recieved By Arduino")
+	// 				res.status(200).send("Data Recieved By Arduino");
+	// 				return;
+	// 			} else if (result == 2) {
+	// 				//console.log("Bad Response From Arduino")
+	// 				res.status(500).send("Bad Response From Arduino");
+	// 				return;
+	// 			} else {
+	// 				//console.log("Internal Server Error 1")
+	// 				res.status(500).send("Internal Server Error 1");
+	// 				return;
+	// 			}
+	// 		});
+	// 	} else {
+	// 		//console.log("Bad Data")
+	// 		res.status(417).send("Bad Data");
+	// 		return;
+	// 	}
+	// } else {
+	// 	//console.log("Incorect Passphrase")
+	// 	res.status(401).send("Incorect Passphrase");
+	// 	return;
+	// }
 });
 
-function checkReponse() {
-	return new Promise((resolve, reject) => {
-		parser.on("data", (data) => {
-			if (data == "OK") {
-				resolve(1);
-			} else {
-				resolve(2);
-			}
-		});
-	});
-}
+// function checkReponse() {
+// 	return new Promise((resolve, reject) => {
+// 		parser.on("data", (data) => {
+// 			if (data == "OK") {
+// 				resolve(1);
+// 			} else {
+// 				resolve(2);
+// 			}
+// 		});
+// 	});
+// }
 
-app.get("/getdata", async (req, res) => {
-	res.json({
-		bucket : bucketHasWater,
-	})
-});
+// app.get("/getdata", async (req, res) => {
+// 	res.json({
+// 		bucket : bucketHasWater,
+// 	})
+// });
 
 
 parser.on("data", (data) => {
-	ardCounter++;
-	if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]") {
-		const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0]);
-		const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
-		console.log("Hour: " + data.split("[")[1].split("]")[0].split(",")[2]);
-		console.log("Min: " + data.split("[")[1].split("]")[0].split(",")[3]);
-		bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == "1");
-		const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
-		db.collection("sensdata").insertOne({
-			sens1: sens1,
-			sens2: sens2,
-			avg: avg,
-			timestamp: new Date(),
-		});
+	
+	// ardCounter++;
+	// if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]") {
+	// 	const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0]);
+	// 	const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
+	// 	console.log("Hour: " + data.split("[")[1].split("]")[0].split(",")[2]);
+	// 	console.log("Min: " + data.split("[")[1].split("]")[0].split(",")[3]);
+	// 	bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == "1");
+	// 	const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
+	// 	db.collection("sensdata").insertOne({
+	// 		sens1: sens1,
+	// 		sens2: sens2,
+	// 		avg: avg,
+	// 		timestamp: new Date(),
+	// 	});
 
-		if (data.split("[")[1].split("]")[0].split(",")[2] != new Date().getHours() || data.split("[")[1].split("]")[0].split(",")[3] != new Date().getMinutes()){
-			syncClock();
-		}
+	// 	if (data.split("[")[1].split("]")[0].split(",")[2] != new Date().getHours() || data.split("[")[1].split("]")[0].split(",")[3] != new Date().getMinutes()){
+	// 		syncClock();
+	// 	}
 
 		//create a new document in the collection sensdata with sens1 and sens2 and the current time as the timestamp
-	}
+	// }
 });
-function syncClock() {
-	const date = new Date();
-	const hour = date.getHours();
-	const min = date.getMinutes();
-	const output = 0 + "[" + hour + "," + min + "]";
-	port.write(output);
-	if(checkReponse() != 1){
-		console.log("Clock Not Synced")
-	}
-}
-const job = schedule.scheduleJob('1 * * * *', () => { // run every hour at minute 1
-    if (ardCounter < 2){
-		port.close();
-		port.open();
-	}
-	ardCounter = 0;
-});
+// function syncClock() {
+// 	const date = new Date();
+// 	const hour = date.getHours();
+// 	const min = date.getMinutes();
+// 	const output = 0 + "[" + hour + "," + min + "]";
+// 	port.write(output);
+// 	if(checkReponse() != 1){
+// 		console.log("Clock Not Synced")
+// 	}
+// }
+// const job = schedule.scheduleJob('1 * * * *', () => { // run every hour at minute 1
+//     if (ardCounter < 2){
+// 		port.close();
+// 		port.open();
+// 	}
+// 	ardCounter = 0;
+// });
