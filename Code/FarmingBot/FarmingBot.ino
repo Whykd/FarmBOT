@@ -16,7 +16,7 @@
 RTC_DS1307 rtc;                     // init RTC obj
 LiquidCrystal_I2C lcd(0x3F, 16, 2); // init LCD obj
 //pump on/off hour, pump on min, pump off min, light on hour, light off hour 
-int timings[] = {8, 45, 47, 7, 19};  
+int timings[] = {9, 35, 37, 7, 19};  
 int sens1 = 0;
 int sens2 = 0;
 boolean timeout = true;
@@ -36,9 +36,9 @@ void setup()
   //  Serial.println("Couldn't find RTC");
   //   while (1) delay(10);
   // }.
-//  rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
+  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
   isntWet();
-  sendData();
+//  sendData();
 }
 
 boolean isntWet()
@@ -62,43 +62,43 @@ boolean isNight()
 }
 
 //to fix later
-void checkUpdates()
-{
-  if (Serial.available() == 0)
-  {
-    StaticJsonDocument<96> doc;
+//void checkUpdates()
+//{
+//  if (Serial.available() == 0)
+//  {
+//    StaticJsonDocument<96> doc;
+//
+//    DeserializationError error = deserializeJson(doc, Serial);
+//
+//    if (error) {
+//     // add output on screen if error as serial bus is in use
+//     return;
+//    }
+//
+//    int timings[0] = doc["wstarth"]; // water start hour
+//    int timings[1] = doc["wstartm"]; // water start minute
+//    int timings[2] = doc["wendm"];   // water end minute
+//    int timings[3] = doc["lstartm"]; // light start minute
+//    int timings[4] = doc["lendm"];   // light end minute
+//
+//    //rtc.adjust(DateTime(23, 6, 26, arr[0], arr[1], 0)); // sets rtc dont forget to add this back you moron (luke)
+//  }
+//  
+//
+//}
 
-    DeserializationError error = deserializeJson(doc, Serial);
-
-    if (error) {
-     // add output on screen if error as serial bus is in use
-     return;
-    }
-
-    int timings[0] = doc["wstarth"]; // water start hour
-    int timings[1] = doc["wstartm"]; // water start minute
-    int timings[2] = doc["wendm"];   // water end minute
-    int timings[3] = doc["lstartm"]; // light start minute
-    int timings[4] = doc["lendm"];   // light end minute
-
-    //rtc.adjust(DateTime(23, 6, 26, arr[0], arr[1], 0)); // sets rtc dont forget to add this back you moron (luke)
-  }
-  
-
-}
-
-void sendData()
-{
-  StaticJsonDocument<24> doc;
-  DateTime now = rtc.now();
-  uint32_t timestamp = now.unixtime());
-
-  doc["sens1"] = sens1;
-  doc["sens2"] = sens2;
-  doc["time"] = timestamp;
-
-  serializeJson(doc, Serial);
-}
+//void sendData()
+//{
+//  StaticJsonDocument<24> doc;
+//  DateTime now = rtc.now();
+//  uint32_t timestamp = now.unixtime());
+//
+//  doc["sens1"] = sens1;
+//  doc["sens2"] = sens2;
+//  doc["time"] = timestamp;
+//
+//  serializeJson(doc, Serial);
+//}
 
 void loop()
 {
@@ -127,10 +127,10 @@ void loop()
   else{
     lcd.print(rtc.now().minute());
   }
-  checkUpdates();
+//  checkUpdates();
 
   if ((time.minute() == 30 || time.minute() == 0) && time.second() > 58){
-    sendData();
+    //sendData();
   }
   delay(1000);
   lcd.clear();
