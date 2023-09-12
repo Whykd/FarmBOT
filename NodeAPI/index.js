@@ -5,6 +5,10 @@ const schedule = require('node-schedule');
 require("dotenv").config();
 const uri = process.env.URI;
 const sport = process.env.SPORT;
+const fs = require('fs');
+fs.writeFile('output.txt', '', err => {
+    if (err) console.error(err);
+});
 //console.log(uri)
 const client = new MongoClient(uri);
 try {
@@ -100,27 +104,31 @@ app.post("/update", async (req, res) => {
 
 parser.on("data", (data) => {
 	
-	// ardCounter++;
-	// if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]") {
-	// 	const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0]);
-	// 	const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
-	// 	console.log("Hour: " + data.split("[")[1].split("]")[0].split(",")[2]);
-	// 	console.log("Min: " + data.split("[")[1].split("]")[0].split(",")[3]);
-	// 	bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == "1");
-	// 	const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
-	// 	db.collection("sensdata").insertOne({
-	// 		sens1: sens1,
-	// 		sens2: sens2,
-	// 		avg: avg,
-	// 		timestamp: new Date(),
-	// 	});
+	ardCounter++;
+	if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]") {
+		const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0]);
+		const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
+		console.log("Hour: " + data.split("[")[1].split("]")[0].split(",")[2]);
+		console.log("Min: " + data.split("[")[1].split("]")[0].split(",")[3]);
+		//bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == "1");
+		const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
+		db.collection("sensdata").insertOne({
+			sens1: sens1,
+			sens2: sens2,
+			avg: avg,
+			timestamp: new Date(),
+		});
 
-	// 	if (data.split("[")[1].split("]")[0].split(",")[2] != new Date().getHours() || data.split("[")[1].split("]")[0].split(",")[3] != new Date().getMinutes()){
-	// 		syncClock();
-	// 	}
+
+		if (data.split("[")[1].split("]")[0].split(",")[2] != new Date().getHours() || data.split("[")[1].split("]")[0].split(",")[3] != new Date().getMinutes()){
+			syncClock();
+		}
+		fs.appendFile('output.txt', avg + '\n', "utf8", err => {
+			if (err) console.error(err);
+		});
 
 		//create a new document in the collection sensdata with sens1 and sens2 and the current time as the timestamp
-	// }
+	}
 });
 // function syncClock() {
 // 	const date = new Date();
