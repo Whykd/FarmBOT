@@ -37,7 +37,28 @@ app.listen(PORT, () => {
 
 app.post("/update", async (req, res) => {
 	const pf = req.body.passphrase;
-	const data = JSON.stringify(req.body.data);
+	const data = req.body.data;
+
+	const watertHour = data.WaterHour
+	const waterStartMin = data.waterStartMin
+	const waterEndMin = data.waterEndMin
+	const lightStartHour = data.lightStartHour
+	const lightEndHour = data.lightEndHour
+
+	dataOut = {
+		wh : watertHour,
+		wsm : waterStartMin,
+		wem : waterEndMin,
+		lsh : lightStartHour,
+		leh : lightEndHour
+	}
+
+	if (pf == process.env.PASSPHRASE){
+		port.write(dataOut)
+
+	}
+
+
 	// let ln = 0;
 	// if (data) {
 	// 	ln = data.split("[")[1].split("]")[0].split(",").length;
@@ -79,63 +100,49 @@ app.post("/update", async (req, res) => {
 	// }
 });
 
-// function checkReponse() {
-// 	return new Promise((resolve, reject) => {
-// 		parser.on("data", (data) => {
-// 			if (data == "OK") {
-// 				resolve(1);
-// 			} else {
-// 				resolve(2);
-// 			}
-// 		});
-// 	});
-// }
+app.put("/data", async (req, res) => {
+	dataOut = db.collection("sensdata").find().limit(60)
+	res.send(dataOut)
+})
 
-// app.get("/getdata", async (req, res) => {
-// 	res.json({
-// 		bucket : bucketHasWater,
-// 	})
-// });
 
 
 parser.on("data", (data) => {
-	
-	// ardCounter++;
-	// if (data.substring(0, 1) == "[" && data.substring(data.length - 1) == "]") {
-	// 	const sens1 = parseInt(data.split("[")[1].split("]")[0].split(",")[0]);
-	// 	const sens2 = parseInt(data.split("[")[1].split("]")[0].split(",")[1]);
-	// 	console.log("Hour: " + data.split("[")[1].split("]")[0].split(",")[2]);
-	// 	console.log("Min: " + data.split("[")[1].split("]")[0].split(",")[3]);
-	// 	bucketHasWater = ((data.split("[")[1].split("]")[0].split(",")[4]) == "1");
-	// 	const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
-	// 	db.collection("sensdata").insertOne({
-	// 		sens1: sens1,
-	// 		sens2: sens2,
-	// 		avg: avg,
-	// 		timestamp: new Date(),
-	// 	});
+	ardCounter++
+	const sens1 = data.sens1
+	const sens2 = data.sens2
+	const avg = (parseInt(sens1) + parseInt(sens2)) / 2;
+	db.collection("sensdata").insertOne
+	({
+		sens1: sens1,
+		sens2: sens2,
+		avg: avg,
+		timestamp: new Date(),
+	});
+	const hasWater = data.hasWater
 
-	// 	if (data.split("[")[1].split("]")[0].split(",")[2] != new Date().getHours() || data.split("[")[1].split("]")[0].split(",")[3] != new Date().getMinutes()){
-	// 		syncClock();
-	// 	}
+	const curHour = data.curHour
+	const curMin = data.curMin
 
-		//create a new document in the collection sensdata with sens1 and sens2 and the current time as the timestamp
-	// }
+	if (curHour != new Date().getHours() || curMin != new Date().getMinutes()){
+		syncClock()
+	}
+
 });
-// function syncClock() {
-// 	const date = new Date();
-// 	const hour = date.getHours();
-// 	const min = date.getMinutes();
-// 	const output = 0 + "[" + hour + "," + min + "]";
-// 	port.write(output);
-// 	if(checkReponse() != 1){
-// 		console.log("Clock Not Synced")
-// 	}
-// }
-// const job = schedule.scheduleJob('1 * * * *', () => { // run every hour at minute 1
-//     if (ardCounter < 2){
-// 		port.close();
-// 		port.open();
-// 	}
-// 	ardCounter = 0;
-// });
+function syncClock() {
+	const date = new Date();
+	const hour = date.getHours();
+	const min = date.getMinutes();
+	const output = {
+		hour : hour,
+		min : min
+	}
+	port.write(output);
+}
+const job = schedule.scheduleJob('1 * * * *', () => { // run every hour at minute 1
+    if (ardCounter < 2){
+		port.close();
+		port.open();
+	}
+	ardCounter = 0;
+});
