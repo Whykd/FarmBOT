@@ -1,0 +1,1 @@
+g++ -W -Wall -Wextra -Wno-unused-parameter -O3 -g -fPIC  -DDEFAULT_HARDWARE=regular -fno-exceptions -std=c++11
