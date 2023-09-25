@@ -119,13 +119,7 @@ function init() {
   fi
 }
 function update() {
-  mkdir -p /tmp/FarmBOT
-  touch /FarmBOT/NodeAPI/.env
-  cp /FarmBOT/NodeAPI/.env /tmp/FarmBOT/.env
-  rm -rf /FarmBOT
-  git clone $repolocation /FarmBOT
-  cp /tmp/FarmBOT/.env /FarmBOT/NodeAPI/.env
-  rm -rf /tmp/FarmBOT
+  git pull "https://github.com/Whykd/FarmBOT"
   if [ $verbose == "true" ]; then
     echo "Script updated"
   fi

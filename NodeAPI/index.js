@@ -3,6 +3,7 @@ const cors = require("cors");
 const { MongoClient } = require("mongodb");
 const schedule = require('node-schedule');
 require("dotenv").config();
+const { insertNewData, initScreen} = require("/display.js")
 const uri = process.env.URI;
 const sport = process.env.SPORT;
 //console.log(uri)
@@ -14,7 +15,6 @@ try {
 }
 const db = client.db("sensdata");
 const app = express();
-//db.collection('sensdata').deleteMany({});
 const { SerialPort } = require("serialport");
 const { ReadlineParser } = require("@serialport/parser-readline");
 const port = new SerialPort({ path: sport, baudRate: 57600 }, function (err) {
@@ -24,6 +24,8 @@ const port = new SerialPort({ path: sport, baudRate: 57600 }, function (err) {
 });
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n" }));
 const PORT = 4000;
+
+initScreen()
 
 let ardCounter = 0;
 // let bucketHasWater = false;
@@ -55,49 +57,11 @@ app.post("/update", async (req, res) => {
 
 	if (pf == process.env.PASSPHRASE){
 		port.write(dataOut)
-
+		res.status(200).send()
 	}
-
-
-	// let ln = 0;
-	// if (data) {
-	// 	ln = data.split("[")[1].split("]")[0].split(",").length;
-	// }
-
-	// if (pf == process.env.PASSPHRASE) {
-	// 	if (ln == 5) {
-	// 		const output = 1 + data.substring(1, data.length - 1);
-	// 		port.write(output);
-	// 		checkReponse().then((result) => {
-	// 			if (result == 0) {
-	// 				//console.log("No Data Recieved By Arduino")
-	// 				res.status(503).send("No Data Recieved By Arduino");
-	// 				return;
-	// 			}
-	// 			if (result == 1) {
-	// 				//console.log("Data Recieved By Arduino")
-	// 				res.status(200).send("Data Recieved By Arduino");
-	// 				return;
-	// 			} else if (result == 2) {
-	// 				//console.log("Bad Response From Arduino")
-	// 				res.status(500).send("Bad Response From Arduino");
-	// 				return;
-	// 			} else {
-	// 				//console.log("Internal Server Error 1")
-	// 				res.status(500).send("Internal Server Error 1");
-	// 				return;
-	// 			}
-	// 		});
-	// 	} else {
-	// 		//console.log("Bad Data")
-	// 		res.status(417).send("Bad Data");
-	// 		return;
-	// 	}
-	// } else {
-	// 	//console.log("Incorect Passphrase")
-	// 	res.status(401).send("Incorect Passphrase");
-	// 	return;
-	// }
+	else {
+		res.status(401).send("Unathorized")
+	}
 });
 
 app.put("/data", async (req, res) => {
@@ -127,6 +91,8 @@ parser.on("data", (data) => {
 	if (curHour != new Date().getHours() || curMin != new Date().getMinutes()){
 		syncClock()
 	}
+
+	insertNewData(data)
 
 });
 function syncClock() {
