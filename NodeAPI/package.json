@@ -14,6 +14,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.10.0",
-    "serialport": "^10.5.0"
+    "serialport": "^10.5.0",
+    "rpi-led-matrix" : "1.14.0"
   }
 }
