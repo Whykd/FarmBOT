@@ -15,6 +15,7 @@ function InsertNewData(newData){
     sens1 = ((sens1 * 32)/1024) + 1;
     sens2 = ((sens2 * 32)/1024) + 1;
     if (sens1 > sens2){
+      //fills the matrix in order so they overlap correctly
       matrix.fgColor({ r: 255, g: 173, b: 66 })
       .fill(vals + 2, 0, vals + 2, sens1)
       .fgColor({ r: 164, g: 255, b: 66 })
