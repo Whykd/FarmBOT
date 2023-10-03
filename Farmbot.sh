@@ -58,7 +58,7 @@ fi
 #                     "backend"                        #
 # **************************************************** #
 function setup(){
-  pacman -Syu nodejs npm motion git arduino-cli --noconfirm
+  pacman -Syu nodejs npm motion git arduino-cli make --noconfirm
   npm install pm2@latest -g
   systemctl enable motion
   arduino-cli core install arduino:avr
