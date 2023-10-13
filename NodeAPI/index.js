@@ -25,7 +25,7 @@ const port = new SerialPort({ path: sport, baudRate: 57600 }, function (err) {
 const parser = port.pipe(new ReadlineParser({ delimiter: "\r\n" }));
 const PORT = 4000;
 
-initScreen()
+const matrix = initScreen()
 
 let ardCounter = 0;
 // let bucketHasWater = false;
@@ -92,7 +92,7 @@ parser.on("data", (data) => {
 		syncClock()
 	}
 
-	insertNewData(data)
+	insertNewData(data,matrix)
 
 });
 function syncClock() {

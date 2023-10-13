@@ -1,7 +1,6 @@
 const {LedMatrix, GpioMapping} = require('rpi-led-matrix');
-const matrix = initScreen();
 
-function InsertNewData(newData){
+function InsertNewData(newData , matrix){
   matrix.clear();
   //fill(x0: number, y0: number, x1: number, y1: number)
   //fgColor({ r: 255, g: 0, b: 0 })

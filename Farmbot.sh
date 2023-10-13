@@ -166,10 +166,10 @@ if [[ $1 == "-setup" ]] || [[ $1 == "-su" ]];then
 fi
 
 # check if the nodeAPI folder contains an .env file
-if [ ! -f "/FarmBOT/NodeAPI/.env" ]
-  then echo "Please add the .env file to the NodeAPI folder"
-  exit
-fi
+#if [ ! -f "/FarmBOT/NodeAPI/.env" ]
+#  then echo "Please add the .env file to the NodeAPI folder"
+#  exit
+#fi
 
 # install required packages on alpine linux
 if [[ $1 == "-init" ]] || [[ $1 == "-i" ]];then

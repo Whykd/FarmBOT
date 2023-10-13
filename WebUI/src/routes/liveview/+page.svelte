@@ -4,5 +4,5 @@
     <meta http-Equiv="Expires" Content="0" />
 </head>
 <body>
-<iframe src="http://10.20.180.61:8081/?action=stream" width="640" height="480"></iframe>
+<iframe src="http://localhost:8081/?action=stream" width="640" height="480"></iframe>
 </body>
