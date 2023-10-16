@@ -4,7 +4,8 @@ function InsertNewData(newData , matrix){
   matrix.clear();
   //fill(x0: number, y0: number, x1: number, y1: number)
   //fgColor({ r: 255, g: 0, b: 0 })
-  matrix.fgColor({r:0, g:0, b:0})
+  //change back to 0, 0, 0, when done
+  matrix.fgColor({r:125, g:125, b:125})
   .fill();
   for(let vals = 0; vals < 60; vals++){
     let avg = newData[vals]["Sensors"]["avg"]
