@@ -25,7 +25,7 @@ void setup()
   digitalWrite(pump, HIGH);
   digitalWrite(lights, HIGH);
   rtc.begin();
-  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
+  //`rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); // sets rtc to time when code is compiled
 }
 
 boolean isNight()
