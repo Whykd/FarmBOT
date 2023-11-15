@@ -4,8 +4,8 @@
 bool pumpEnabled = true;
 bool lightEnable = true;
 
-int bypassPumpState = false;
-int bypassLightState = false;
+bool bypassPumpState = false;
+bool bypassLightState = false;
 
 int pHour = 0;
 int pMinuteOn = 0;
